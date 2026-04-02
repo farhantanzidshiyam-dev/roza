@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Roza Gift Corner & Electric | Payment Portal</title>
+    <!-- Font Awesome 4.7 & 6 for icons (used elsewhere, but not for fb/wa in footer) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ========== STYLES - CLEAN & SIMPLE ========== */
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #1e293b;
+            --card-bg: white;
+            --card-border: #e2e8f0;
+            --footer-bg: #1e293b;
+            --footer-text: #cbd5e1;
+            --footer-link: #94a3b8;
+            --footer-link-hover: #3b82f6;
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --secondary-bg: #f8fafc;
+            --secondary-color: #10b981;
+            --secondary-hover: #059669;
+            --highlight-color: #ef4444;
+            --highlight-bg: #fef2f2;
+            --modal-bg: rgba(0, 0, 0, 0.5);
+            --modal-content-bg: white;
+            --input-bg: #f8fafc;
+            --input-border: #e2e8f0;
+            --access-bg: #f97316;
+            --access-hover: #ea580c;
+            --cancel-bg: #e2e8f0;
+            --submit-bg: #3b82f6;
+            --telegram-color: #0088cc;
+            --telegram-hover: #006699;
+            --payment-card-bg: #ffffff;
+            --payment-border: #e5e7eb;
+            --payment-text: #111827;
+            --payment-muted: #6b7280;
+            --payment-accent: #3b82f6;
+            --fb-color: #1877f2;
+            --wa-color: #25D366;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            /* Disable text selection and copying globally */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        /* Allow text selection only on input fields (for usability) */
+        input, textarea, .form-input, .modal-input, .simple-select {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+        
+        /* Disable image dragging and context menu */
+        img, i, .fa, .fab, .fas {
+            pointer-events: none;
+            user-drag: none;
+            -webkit-user-drag: none;
+        }
+        
+        /* Prevent context menu on the whole page */
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            flex: 1;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            text-align: center;
+            padding: 20px 0 15px;
+            border-bottom: 2px solid var(--card-border);
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .brand-title {
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .brand-categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        
+        .category-divider {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .contact-line {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .contact-number {
+            color: var(--primary-color);
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
+        }
+        
+        .address-line {
+            color: var(--footer-link);
+            font-size: 14px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 8px 0;
+        }
+        
+        /* Management Systems */
+        .section-title {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .systems-list {
+            max-width: 500px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            overflow: hidden;
+        }
+        
+        .system-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--card-border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .system-item:last-child {
+            border-bottom: none;
+        }
+        
+        .system-item:hover {
+            background: var(--secondary-bg);
+        }
+        
+        .system-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .system-icon {
+            font-size: 20px;
+            width: 32px;
+        }
+        
+        .system-name {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .system-arrow {
+            color: var(--primary-color);
+            font-size: 14px;
+            opacity: 0.6;
+        }
+        
+        /* Online Store Button */
+        .store-section {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto 10px;
+        }
+        
+        .online-store-btn {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 60px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(107, 70, 193, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .online-store-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(107, 70, 193, 0.4);
+        }
+        
+        .external-invoice-simple {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin: 10px auto 20px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .external-invoice-link {
+            background: var(--access-bg);
+            border: none;
+            color: white;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .external-invoice-link:hover {
+            background: var(--access-hover);
+            transform: translateY(-2px);
+        }
+        
+        /* Payment Portal */
+        .payment-portal-wrapper {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            width: 100%;
+            display: none;
+            animation: fadeSlideDown 0.3s ease;
+        }
+        
+        .payment-portal-wrapper.open {
+            display: block;
+        }
+        
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .payment-portal-card {
+            background: var(--payment-card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--payment-border);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .payment-portal-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 20px 24px;
+            color: white;
+        }
+        
+        .payment-portal-header h2 {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        
+        .payment-portal-header p {
+            opacity: 0.85;
+            font-size: 13px;
+        }
+        
+        .payment-portal-body {
+            padding: 24px;
+        }
+        
+        .simple-select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--payment-border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--payment-text);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .simple-select:focus {
+            outline: none;
+            border-color: var(--payment-accent);
+        }
+        
+        .form-row {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--payment-text);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--input-bg);
+            border: 1.5px solid var(--payment-border);
+            border-radius: 12px;
+            font-size: 15px;
+            color: var(--payment-text);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--payment-accent);
+        }
+        
+        .helper-hint {
+            font-size: 12px;
+            color: var(--payment-muted);
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+        
+        .action-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin: 22px 0 18px;
+        }
+        
+        .pay-btn {
+            padding: 12px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .btn-copy {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-copy:hover {
+            background: var(--secondary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-telegram {
+            background: var(--telegram-color);
+            color: white;
+        }
+        
+        .btn-telegram:hover {
+            background: var(--telegram-hover);
+            transform: translateY(-1px);
+        }
+        
+        .payment-summary {
+            background: var(--secondary-bg);
+            border-radius: 16px;
+            padding: 14px;
+            margin-top: 16px;
+            border-left: 3px solid var(--payment-accent);
+        }
+        
+        .summary-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .summary-content {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--payment-text);
+        }
+        
+        .info-note {
+            background: var(--highlight-bg);
+            color: var(--highlight-color);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .open-payment-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            font-size: 17px;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+        
+        .open-payment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(16, 185, 129, 0.3);
+        }
+        
+        /* Toast */
+        .toast-msg {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            z-index: 2000;
+            animation: fadeUp 0.3s ease;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            background: var(--footer-bg);
+            padding: 30px 20px 25px;
+            border-top: 1px solid var(--card-border);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .footer-col h4 {
+            color: white;
+            font-size: 15px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .footer-col a,
+        .footer-col .contact-text {
+            display: block;
+            color: var(--footer-link);
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .footer-col a:hover {
+            color: var(--footer-link-hover);
+        }
+        
+        .contact-text i {
+            margin-right: 6px;
+            width: 18px;
+        }
+        
+        /* Text-based social links - NO ICONS, pure text */
+        .social-text-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .social-text-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--footer-link);
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            width: fit-content;
+            font-weight: 500;
+        }
+        
+        /* No icons at all for these buttons - pure text only */
+        .social-text-link i {
+            display: none;
+        }
+        
+        .social-text-link.facebook-link:hover {
+            color: #1877f2;
+        }
+        
+        .social-text-link.whatsapp-link:hover {
+            color: #25D366;
+        }
+        
+        .developer-credit {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--card-border);
+            font-size: 12px;
+            color: var(--footer-text);
+        }
+        
+        .developer-credit a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .developer-credit a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Modals */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-bg);
+            backdrop-filter: blur(4px);
+            z-index: 1500;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content-box {
+            background: var(--modal-content-bg);
+            border-radius: 24px;
+            padding: 28px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--card-border);
+            animation: modalPop 0.3s ease;
+        }
+        
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .modal-content-box h3 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .modal-content-box p {
+            color: var(--footer-link);
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 50px;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 4px;
+            color: var(--text-color);
+            margin: 12px 0;
+            font-weight: 600;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .modal-error {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 8px;
+            border-radius: 10px;
+            margin: 8px 0;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .modal-submit {
+            background: var(--submit-bg);
+            color: white;
+        }
+        
+        .modal-submit:hover {
+            background: var(--primary-hover);
+        }
+        
+        .modal-cancel {
+            background: var(--cancel-bg);
+            color: #475569;
+        }
+        
+        .modal-cancel:hover {
+            background: #cbd5e1;
+        }
+        
+        /* Animated UI Modal for Online Store */
+        .animated-store-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1600;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .store-modal-card {
+            background: linear-gradient(145deg, #ffffff, #f9f9ff);
+            border-radius: 48px;
+            max-width: 450px;
+            width: 85%;
+            padding: 32px 28px;
+            text-align: center;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            animation: floatIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        @keyframes floatIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .store-modal-icon {
+            font-size: 60px;
+            background: linear-gradient(135deg, #8b5cf6, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+        
+        .store-modal-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6d28d9, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+        }
+        
+        .store-modal-message {
+            color: #334155;
+            font-size: 16px;
+            margin: 20px 0;
+            line-height: 1.5;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            background: #e2e8f0;
+            border-radius: 60px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #c084fc);
+            border-radius: 60px;
+            animation: loadProgress 2.2s ease forwards;
+        }
+        
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            40% { width: 65%; }
+            100% { width: 100%; }
+        }
+        
+        .store-close-btn {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 16px;
+            transition: transform 0.2s;
+        }
+        
+        .store-close-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 14px rgba(107, 70, 193, 0.4);
+        }
+        
+        .store-note {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="brand-title">Roza Gift Corner & Electric</h1>
+            <div class="brand-categories">
+                <span>Gifts</span><span class="category-divider">|</span><span>Electrical</span><span class="category-divider">|</span>
+                <span>Cosmetics</span><span class="category-divider">|</span><span>Stationary</span><span class="category-divider">|</span><span>& more</span>
+            </div>
+            <div class="contact-line">
+                <div class="contact-number">📞 01319362189</div>
+            </div>
+            <div class="address-line">Mosjid Market, Naohata Mor, Mohadevpur, Naogaon</div>
+        </header>
+        
+        <main>
+            <!-- Online Store Button -->
+            <div class="store-section">
+                <button class="online-store-btn" id="animatedStoreBtn">🛍️ Explore Online Store <i class="fas fa-arrow-right"></i></button>
+            </div>
+            
+            <button class="open-payment-btn" id="togglePaymentBtn">💳 Make a Payment ▼</button>
+            
+            <!-- PAYMENT PORTAL -->
+            <div class="payment-portal-wrapper" id="paymentPortalWrapper">
+                <div class="payment-portal-card">
+                    <div class="payment-portal-header">
+                        <h2>💸 Payment Portal</h2>
+                        <p>Select method & submit for verification</p>
+                    </div>
+                    <div class="payment-portal-body">
+                        <div class="methods-selector">
+                            <div class="selector-title">📱 Payment Method</div>
+                            <select id="methodSelect" class="simple-select">
+                                <option value="01965733761|bKash (Merchant Payment)">bKash (Merchant) - 01965733761</option>
+                                <option value="01340561000|bKash (Send Money)">bKash (Send Money) - 01340561000</option>
+                                <option value="01319362189|Nagad">Nagad - 01319362189</option>
+                                <option value="01838947201|Rocket (DBBL)">Rocket (DBBL) - 01838947201</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <label class="form-label">💰 Amount (BDT)</label>
+                            <input type="number" id="payAmount" class="form-input" placeholder="Enter amount" step="1" min="1">
+                        </div>
+                        
+                        <div class="form-row">
+                            <label class="form-label">📱 Your Mobile Number</label>
+                            <input type="tel" id="customerMobile" class="form-input" placeholder="01XXXXXXXXX">
+                            <div class="helper-hint">💡 The number you used to send money from</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <label class="form-label">📝 Reference / Order ID (Optional)</label>
+                            <input type="text" id="payReference" class="form-input" placeholder="e.g., Order #123">
+                        </div>
+                        
+                        <div class="action-row">
+                            <button class="pay-btn btn-copy" id="copyNumberBtn">📋 Copy Account</button>
+                            <button class="pay-btn btn-telegram" id="telegramSendBtn">📤 Upload for Verification</button>
+                        </div>
+                        
+                        <div class="payment-summary" id="paymentSummary">
+                            <div class="summary-title">🧾 Payment Summary</div>
+                            <div class="summary-content" id="summaryDetails">Select a payment method</div>
+                        </div>
+                        <div class="info-note">⚡ Click "Upload for Verification" - Your payment info will be sent to the shop owner for confirmation.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MANAGEMENT SYSTEMS - Data Management & Invoice System -->
+            <h2 class="section-title">Management Systems</h2>
+            <div class="systems-list">
+                <div class="system-item" id="dataManagementItem">
+                    <div class="system-info">
+                        <span class="system-icon">🚀</span>
+                        <span class="system-name">Data Management System</span>
+                    </div>
+                    <span class="system-arrow">→</span>
+                </div>
+                <div class="system-item" id="invoiceItem">
+                    <div class="system-info">
+                        <span class="system-icon">🧾</span>
+                        <span class="system-name">Invoice System</span>
+                    </div>
+                    <span class="system-arrow">→</span>
+                </div>
+            </div>
+            
+            <div class="external-invoice-simple">
+                <span>📄 External Invoice Portal</span>
+                <button class="external-invoice-link" id="externalInvoiceSimpleBtn">↗ Access</button>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col"><h4>Explore</h4><a id="footerHomeLink">🏠 Home</a><a id="footerStoreLink">🛒 Online Store</a><a id="footerPaymentLink">💳 Payment Portal</a></div>
+                <div class="footer-col"><h4>Support</h4><a id="footerHelpLink">❓ Help Us</a><a id="footerPrivacyLink">🔒 Privacy Policy</a><a id="footerTermsLink">📜 Terms & Conditions</a></div>
+                <div class="footer-col">
+                    <h4>Get in Touch</h4>
+                    <div class="contact-text clickable-contact" id="phoneOne"><i class="fa fa-phone"></i> 01319362189</div>
+                    <div class="contact-text clickable-contact" id="phoneTwo"><i class="fa fa-phone"></i> 01715986646</div>
+                    <div class="contact-text clickable-contact" id="emailContact"><i class="fa fa-envelope"></i> farhantanzidshiyam@gmail.com</div>
+                    <!-- Text-based social links: NO icons visible (pure text buttons) -->
+                    <div class="social-text-links">
+                        <button class="social-text-link facebook-link" id="facebookTextLink">Facebook Page</button>
+                        <button class="social-text-link whatsapp-link" id="whatsappTextLink">WhatsApp</button>
+                    </div>
+                </div>
+                <div class="footer-col"><h4>Quick Links</h4><a id="desktopSystemLinkFooter">🖥️ Desktop System</a><a id="mobileSystemLinkFooter">📱 Mobile System</a><a id="dataBackupLinkFooter">💾 Data Backup</a></div>
+            </div>
+            <div class="developer-credit">Developed & Designed by <a href="#" id="developerLink">Farhan Tanzid Shiyam</a> | © <span id="year"></span> Roza Gift Corner & Electric</div>
+        </div>
+    </footer>
+    
+    <!-- Password Modals -->
+    <div class="password-modal" id="passwordModal">
+        <div class="modal-content-box"><h3>🔒 <span id="modalTitle">Enter Password</span></h3><p>Please enter the security code</p><input type="password" id="passwordInput" class="modal-input" placeholder="****" maxlength="4" autocomplete="off"><div class="modal-error" id="errorMsg"><span>❌</span> Incorrect password</div><div class="modal-buttons"><button class="modal-btn modal-cancel" id="cancelPwdBtn">Cancel</button><button class="modal-btn modal-submit" id="submitPwdBtn">Submit</button></div></div>
+    </div>
+    <div class="password-modal" id="invoicePasswordModal">
+        <div class="modal-content-box"><h3>🔐 External Invoice Portal</h3><p>Enter security password</p><input type="password" id="invoicePasswordInput" class="modal-input" placeholder="****" maxlength="4" autocomplete="off"><div class="modal-error" id="invoiceErrorMsg"><span>❌</span> Incorrect password</div><div class="modal-buttons"><button class="modal-btn modal-cancel" id="cancelInvoicePwdBtn">Cancel</button><button class="modal-btn modal-submit" id="submitInvoicePwdBtn">Submit</button></div></div>
+    </div>
+    
+    <!-- Animated Store Modal -->
+    <div class="animated-store-modal" id="animatedStoreModal">
+        <div class="store-modal-card">
+            <div class="store-modal-icon"><i class="fas fa-store"></i></div>
+            <div class="store-modal-title">Coming Soon!</div>
+            <div class="store-modal-message">We're crafting a delightful online shopping experience. Get ready for exclusive deals, gifts & electrical items at your fingertips.</div>
+            <div class="progress-bar-container"><div class="progress-fill"></div></div>
+            <div class="store-note">🚀 Launching in few weeks — Stay tuned!</div>
+            <button class="store-close-btn" id="closeAnimatedStoreBtn">Got it, notify me</button>
+        </div>
+    </div>
+    
+    <script>
+        (function() {
+            // Disable right-click context menu globally
+            document.addEventListener('contextmenu', (e) => e.preventDefault());
+            
+            const BOT_TOKEN = "8266093109:AAFCQt0PN538SiX5pAOPASBrwRX-3sLb1Sg";
+            const CHAT_ID = "8527818075";
+            const SYSTEM_URLS = {
+                desktop: "https://farhantanzidshiyam-dev.github.io/rozagiftcorner/",
+                mobile: "https://farhantanzidshiyam-dev.github.io/rozagiftcorner-backup/",
+                invoice: "https://farhantanzidshiyam-dev.github.io/rozagiftcorner-invoice/",
+                externalInvoice: "https://farhantanzidshiyam-dev.github.io/rozagiftcorner-invoice-ext/",
+                terms: "https://farhantanzidshiyam-dev.github.io/rozagiftcorner-terms-conditions/",
+                dataBackup: "https://drive.google.com/drive/folders/1yYuczLULObc0TrnQ3XlInfD8MH08POfs"
+            };
+            // NEW: Unified password for all internal systems = "3580"
+            const UNIFIED_PASSWORD = "3580";
+            const EXTERNAL_INVOICE_PASSWORD = "1822";
+            let currentAction = null;
+            const FACEBOOK_URL = "https://www.facebook.com/farhan.tanzid.shiyam";
+            const WHATSAPP_URL = "https://wa.me/8801319362189";
+            
+            function navigateWithBack(url) {
+                window.location.href = url;
+            }
+            
+            // Helper: setup Enter key and auto-focus for password modals
+            function setupModalFocusAndEnter(inputElem, submitBtn, modalElem) {
+                // Auto-focus when modal becomes visible
+                const observer = new MutationObserver((mutations) => {
+                    if (modalElem.style.display === 'flex') {
+                        setTimeout(() => inputElem.focus(), 50);
+                    }
+                });
+                observer.observe(modalElem, { attributes: true, attributeFilter: ['style'] });
+                // Enter key submission
+                inputElem.addEventListener('keypress', (e) => {
+                    if(e.key === 'Enter') {
+                        e.preventDefault();
+                        submitBtn.click();
+                    }
+                });
+            }
+            
+            // Payment select logic
+            const methodSelect = document.getElementById('methodSelect');
+            let selectedNumber = "01965733761";
+            let selectedName = "bKash (Merchant Payment)";
+            methodSelect.addEventListener('change', () => {
+                const [number, name] = methodSelect.value.split('|');
+                selectedNumber = number;
+                selectedName = name;
+                updateSummary();
+            });
+            
+            const amountInput = document.getElementById('payAmount');
+            const customerMobileInput = document.getElementById('customerMobile');
+            const refInput = document.getElementById('payReference');
+            const summaryDetails = document.getElementById('summaryDetails');
+            function updateSummary() {
+                const amount = amountInput.value === '' ? 0 : parseFloat(amountInput.value);
+                const ref = refInput.value.trim() || "N/A";
+                const mobile = customerMobileInput.value.trim() || "Not provided";
+                const displayAmount = (amount > 0) ? `৳ ${amount.toFixed(2)}` : '—';
+                summaryDetails.innerHTML = `<strong>Method:</strong> ${selectedName}<br><strong>Account:</strong> ${selectedNumber}<br><strong>Amount:</strong> ${displayAmount}<br><strong>Your Mobile:</strong> ${mobile}<br><strong>Reference:</strong> ${ref}`;
+            }
+            amountInput.addEventListener('input', updateSummary);
+            customerMobileInput.addEventListener('input', updateSummary);
+            refInput.addEventListener('input', updateSummary);
+            updateSummary();
+            
+            document.getElementById('copyNumberBtn').addEventListener('click', () => {
+                navigator.clipboard.writeText(selectedNumber).then(() => showToast(`✅ Copied: ${selectedNumber}`)).catch(() => showToast("Copy failed", true));
+            });
+            
+            async function sendToTelegram(amount, method, account, reference, mobile) {
+                const now = new Date();
+                const timeStr = now.toLocaleString('en-BD', { timeZone: 'Asia/Dhaka' });
+                const message = `🛍️ *NEW PAYMENT REQUEST*\n\n💳 Amount: ৳${amount.toFixed(2)}\n📱 Method: ${method}\n🔢 Account: ${account}\n📞 Customer: ${mobile || "Not provided"}\n📝 Reference: ${reference || "N/A"}\n⏰ Time: ${timeStr}\n\n⚠️ Verify payment from ${mobile} before confirming.`;
+                try {
+                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: CHAT_ID, text: message, parse_mode: 'Markdown' })
+                    });
+                    const data = await res.json();
+                    return data.ok ? { success: true, message: "✅ Payment info uploaded!" } : { success: false, message: "Upload failed" };
+                } catch(e) {
+                    return { success: false, message: "Network error" };
+                }
+            }
+            
+            document.getElementById('telegramSendBtn').addEventListener('click', async () => {
+                const amount = parseFloat(amountInput.value);
+                if(isNaN(amount) || amount <= 0) { showToast("⚠️ Enter valid amount", true); return; }
+                const mobile = customerMobileInput.value.trim();
+                if(!mobile) { showToast("📱 Enter your mobile number", true); customerMobileInput.focus(); return; }
+                if(!/^01[3-9]\d{8}$/.test(mobile)) { showToast("⚠️ Valid BD mobile number required", true); customerMobileInput.focus(); return; }
+                const btn = document.getElementById('telegramSendBtn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '⏳ Uploading...';
+                btn.disabled = true;
+                const result = await sendToTelegram(amount, selectedName, selectedNumber, refInput.value.trim(), mobile);
+                btn.innerHTML = original;
+                btn.disabled = false;
+                showToast(result.message, !result.success);
+            });
+            
+            function showToast(msg, isError = false) {
+                const toast = document.createElement('div');
+                toast.className = 'toast-msg';
+                toast.style.background = isError ? '#ef4444' : '#10b981';
+                toast.innerText = msg;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2500);
+            }
+            
+            // Password modal logic for internal systems (UNIFIED_PASSWORD = "3580")
+            const pwdModal = document.getElementById('passwordModal');
+            const pwdInput = document.getElementById('passwordInput');
+            const errorMsg = document.getElementById('errorMsg');
+            const submitPwd = document.getElementById('submitPwdBtn');
+            const cancelPwd = document.getElementById('cancelPwdBtn');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            // Setup auto-focus and enter key for internal password modal
+            setupModalFocusAndEnter(pwdInput, submitPwd, pwdModal);
+            
+            function openPwdModal(action, title) {
+                currentAction = action;
+                modalTitle.innerText = title;
+                pwdInput.value = '';
+                errorMsg.style.display = 'none';
+                pwdModal.style.display = 'flex';
+                setTimeout(() => pwdInput.focus(), 80);
+            }
+            
+            submitPwd.onclick = () => {
+                if(pwdInput.value === UNIFIED_PASSWORD) {
+                    pwdModal.style.display = 'none';
+                    let url = '';
+                    if(currentAction === 'dataManagement') url = /Android|webOS|iPhone|iPad/i.test(navigator.userAgent) ? SYSTEM_URLS.mobile : SYSTEM_URLS.desktop;
+                    else if(currentAction === 'invoice') url = SYSTEM_URLS.invoice;
+                    else if(currentAction === 'desktopSystem') url = SYSTEM_URLS.desktop;
+                    else if(currentAction === 'mobileSystem') url = SYSTEM_URLS.mobile;
+                    else if(currentAction === 'dataBackup') url = SYSTEM_URLS.dataBackup;
+                    if(url) { window.location.href = url; }
+                } else { 
+                    errorMsg.style.display = 'flex'; 
+                    pwdInput.value = ''; 
+                    pwdInput.focus();
+                }
+            };
+            cancelPwd.onclick = () => pwdModal.style.display = 'none';
+            
+            // Bind system items
+            document.getElementById('dataManagementItem').onclick = () => openPwdModal('dataManagement', 'Data Management');
+            document.getElementById('invoiceItem').onclick = () => openPwdModal('invoice', 'Invoice System');
+            document.getElementById('desktopSystemLinkFooter').onclick = (e) => { e.preventDefault(); openPwdModal('desktopSystem', 'Desktop System'); };
+            document.getElementById('mobileSystemLinkFooter').onclick = (e) => { e.preventDefault(); openPwdModal('mobileSystem', 'Mobile System'); };
+            document.getElementById('dataBackupLinkFooter').onclick = (e) => { e.preventDefault(); openPwdModal('dataBackup', 'Data Backup'); };
+            document.getElementById('footerTermsLink').onclick = (e) => { e.preventDefault(); window.location.href = SYSTEM_URLS.terms; };
+            
+            // External invoice modal (password "1822")
+            const invModal = document.getElementById('invoicePasswordModal');
+            const invInput = document.getElementById('invoicePasswordInput');
+            const invError = document.getElementById('invoiceErrorMsg');
+            const submitInvoice = document.getElementById('submitInvoicePwdBtn');
+            setupModalFocusAndEnter(invInput, submitInvoice, invModal);
+            
+            document.getElementById('externalInvoiceSimpleBtn').onclick = () => { 
+                invModal.style.display = 'flex'; 
+                invInput.value = ''; 
+                invError.style.display = 'none';
+                setTimeout(() => invInput.focus(), 80);
+            };
+            submitInvoice.onclick = () => {
+                if(invInput.value === EXTERNAL_INVOICE_PASSWORD) { 
+                    invModal.style.display = 'none'; 
+                    window.location.href = SYSTEM_URLS.externalInvoice; 
+                } else { 
+                    invError.style.display = 'flex'; 
+                    invInput.value = ''; 
+                    invInput.focus();
+                }
+            };
+            document.getElementById('cancelInvoicePwdBtn').onclick = () => invModal.style.display = 'none';
+            
+            // Animated store modal
+            const animatedStoreModal = document.getElementById('animatedStoreModal');
+            const openStoreBtn = document.getElementById('animatedStoreBtn');
+            const closeStoreBtn = document.getElementById('closeAnimatedStoreBtn');
+            openStoreBtn.onclick = () => { animatedStoreModal.style.display = 'flex'; };
+            closeStoreBtn.onclick = () => { animatedStoreModal.style.display = 'none'; };
+            animatedStoreModal.addEventListener('click', (e) => { if(e.target === animatedStoreModal) animatedStoreModal.style.display = 'none'; });
+            document.getElementById('footerStoreLink').onclick = (e) => { e.preventDefault(); animatedStoreModal.style.display = 'flex'; };
+            
+            // Payment portal toggle
+            const toggleBtn = document.getElementById('togglePaymentBtn');
+            const portalWrapper = document.getElementById('paymentPortalWrapper');
+            let isOpen = false;
+            toggleBtn.onclick = () => {
+                isOpen = !isOpen;
+                portalWrapper.classList.toggle('open', isOpen);
+                toggleBtn.innerHTML = isOpen ? '💳 Close Payment Portal ▲' : '💳 Make a Payment ▼';
+            };
+            document.getElementById('footerPaymentLink').onclick = () => { if(!isOpen) toggleBtn.click(); setTimeout(() => window.scrollTo({ top: portalWrapper.offsetTop - 80, behavior: 'smooth' }), 100); };
+            
+            document.getElementById('footerHomeLink').onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('footerHelpLink').onclick = () => window.open('https://wa.me/8801319362189?text=Need%20help', '_blank');
+            document.getElementById('footerPrivacyLink').onclick = () => alert("Privacy Policy: Your data is safe with us.");
+            document.getElementById('phoneOne').onclick = () => window.location.href = 'tel:01319362189';
+            document.getElementById('phoneTwo').onclick = () => window.location.href = 'tel:01715986646';
+            document.getElementById('emailContact').onclick = () => window.location.href = 'mailto:farhantanzidshiyam@gmail.com';
+            
+            // Text-based social links (no icons)
+            document.getElementById('facebookTextLink').onclick = () => navigateWithBack(FACEBOOK_URL);
+            document.getElementById('whatsappTextLink').onclick = () => navigateWithBack(WHATSAPP_URL);
+            document.getElementById('developerLink').onclick = (e) => { e.preventDefault(); navigateWithBack(FACEBOOK_URL); };
+            document.getElementById('year').innerText = new Date().getFullYear();
+        })();
+    </script>
+</body>
+</html>
