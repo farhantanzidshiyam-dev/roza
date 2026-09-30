@@ -938,7 +938,15 @@
 
             const LOGIN_USER = "roza2026";
             const LOGIN_PASS = "shiyam";
-            const SESSION_KEY = "roza_session_auth";
+
+            /* ---------- SESSION KEYS ---------- */
+            const SESSION_KEY      = "roza_session_auth";   // localStorage (shared across tabs)
+            const SESSION_USER_KEY = SESSION_KEY + "_user"; // localStorage
+            const TABS_KEY         = "roza_active_tabs";    // localStorage { tabId: lastSeen }
+            const TAB_ID_KEY       = "roza_tab_id";         // sessionStorage (per tab, survives reload)
+
+            const HEARTBEAT_MS = 2000;    // how often a tab says "I'm alive"
+            const STALE_MS     = 75000;   // a tab is considered gone after this silence
 
             const EXT_TOKEN = "20263058";
             const EXT_SESSION_KEY = "roza_ext_session";
@@ -957,27 +965,114 @@
             }
 
             /* ============================================================
-               SESSION
+               SESSION — shared across tabs, dies with the last tab
+               ------------------------------------------------------------
+               1. Login state lives in localStorage  -> any new tab sees it.
+               2. Every open tab registers itself and sends a heartbeat.
+               3. A brand-new tab only inherits the session if another
+                  live tab still exists (i.e. the logged-in window is
+                  still open). If the last tab was closed, the session
+                  is dropped and the user must log in again.
+               4. A reload keeps the session because the tab identity
+                  survives in sessionStorage.
                ============================================================ */
-            function isLoggedIn() {
-                return sessionStorage.getItem(SESSION_KEY) === 'true';
+
+            /* --- this tab's identity --- */
+            const previousTabId = sessionStorage.getItem(TAB_ID_KEY);
+            const isReturningTab = !!previousTabId;         // true = reload of an existing tab
+            const tabId = previousTabId || ('tab_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8));
+            sessionStorage.setItem(TAB_ID_KEY, tabId);
+
+            /* --- tab registry helpers --- */
+            function readTabs() {
+                try { return JSON.parse(localStorage.getItem(TABS_KEY) || '{}') || {}; }
+                catch (e) { return {}; }
             }
-            function setLoggedIn() {
-                sessionStorage.setItem(SESSION_KEY, 'true');
-                sessionStorage.setItem(SESSION_KEY + '_user', LOGIN_USER);
+            function writeTabs(tabs) {
+                try { localStorage.setItem(TABS_KEY, JSON.stringify(tabs)); } catch (e) {}
             }
-            function getSessionUser() {
-                return sessionStorage.getItem(SESSION_KEY + '_user') || LOGIN_USER;
+            function purgeStaleTabs(tabs) {
+                const now = Date.now();
+                Object.keys(tabs).forEach(id => {
+                    if (now - tabs[id] > STALE_MS) delete tabs[id];
+                });
+                return tabs;
+            }
+            function touchTab() {
+                const tabs = purgeStaleTabs(readTabs());
+                tabs[tabId] = Date.now();
+                writeTabs(tabs);
             }
 
+            /* --- session helpers --- */
+            function isLoggedIn() {
+                return localStorage.getItem(SESSION_KEY) === 'true';
+            }
+            function setLoggedIn() {
+                localStorage.setItem(SESSION_KEY, 'true');
+                localStorage.setItem(SESSION_USER_KEY, LOGIN_USER);
+                touchTab();
+            }
+            function clearSession() {
+                localStorage.removeItem(SESSION_KEY);
+                localStorage.removeItem(SESSION_USER_KEY);
+                const tabs = readTabs();
+                delete tabs[tabId];
+                writeTabs(tabs);
+            }
+            function getSessionUser() {
+                return localStorage.getItem(SESSION_USER_KEY) || LOGIN_USER;
+            }
+
+            /* --- boot check: inherit only while another tab is alive --- */
+            (function bootstrapSession() {
+                const tabs = purgeStaleTabs(readTabs());
+                const otherLiveTabs = Object.keys(tabs).filter(id => id !== tabId);
+
+                // Brand-new tab + no other live tab  => the session owner is gone.
+                if (isLoggedIn() && !isReturningTab && otherLiveTabs.length === 0) {
+                    localStorage.removeItem(SESSION_KEY);
+                    localStorage.removeItem(SESSION_USER_KEY);
+                }
+                if (!isLoggedIn()) {
+                    localStorage.removeItem(SESSION_USER_KEY);
+                }
+
+                tabs[tabId] = Date.now();
+                writeTabs(tabs);
+            })();
+
+            /* --- keep this tab marked alive --- */
+            setInterval(touchTab, HEARTBEAT_MS);
+            window.addEventListener('focus', touchTab);
+            document.addEventListener('visibilitychange', () => { if (!document.hidden) touchTab(); });
+
+            // Leaving / closing this tab -> unregister immediately
+            window.addEventListener('pagehide', () => {
+                const tabs = readTabs();
+                delete tabs[tabId];
+                writeTabs(tabs);
+            });
+            // Coming back from bfcache -> register again
+            window.addEventListener('pageshow', (e) => {
+                if (e.persisted) { touchTab(); refreshSessionUI(); }
+            });
+
+            /* --- another tab signed out -> update this tab too --- */
+            window.addEventListener('storage', (e) => {
+                if (e.key === SESSION_KEY || e.key === SESSION_USER_KEY || e.key === TABS_KEY) {
+                    refreshSessionUI();
+                }
+            });
+
             const sessionStrip = document.getElementById('sessionStrip');
-            const sessionUserEl = document.getElementById('sessionUser');
             const sessionText = document.getElementById('sessionText');
 
             function refreshSessionUI() {
+                const userEl = document.getElementById('sessionUser'); // re-query: innerHTML may be rewritten
                 if (isLoggedIn()) {
                     sessionStrip.classList.add('show');
-                    sessionUserEl.textContent = getSessionUser();
+                    if (userEl) userEl.textContent = getSessionUser();
                 } else {
                     sessionStrip.classList.remove('show');
                 }
@@ -1017,9 +1112,8 @@
                 await sleep(700);
                 sessionStatusText.textContent = 'Clearing session';
 
-                // 6) Actually clear storage
-                sessionStorage.removeItem(SESSION_KEY);
-                sessionStorage.removeItem(SESSION_KEY + '_user');
+                // 6) Actually clear storage (cross-tab session + this tab)
+                clearSession();
                 sessionStorage.removeItem(EXT_SESSION_KEY);
                 sessionStorage.removeItem(EXT_SESSION_KEY + '_email');
 
@@ -1050,9 +1144,7 @@
                 // 9) Reset UI to signed-out state
                 refreshSessionUI();
                 sessionStrip.classList.remove('signed-out', 'signing-out');
-                sessionText.innerHTML = 'Signed in as <strong id="sessionUser">roza2026</strong> &nbsp;·&nbsp; Session active';
-                // Rebind strong element since innerHTML was rewritten
-                // (no need to re-cache since querySelector would re-find it)
+                sessionText.innerHTML = 'Signed in as <strong id="sessionUser">' + LOGIN_USER + '</strong> &nbsp;·&nbsp; Session active';
                 sessionStatusPill.classList.remove('show', 'done');
                 sessionStatusText.textContent = 'Signing out';
                 signOutBtn.classList.remove('loading');
